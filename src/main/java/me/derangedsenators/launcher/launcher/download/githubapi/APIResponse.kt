@@ -35,7 +35,7 @@ class APIResponse : Serializable {
     var assets: List<Assets>? = null
     var body: String? = null
 
-    inner class Assets(val size: Int, val browser_download_url: String) : Serializable
+    inner class Assets(val name: String,val size: Int, val browser_download_url: String) : Serializable
 
     /**
      * Attempts to serialise the API response for later use
