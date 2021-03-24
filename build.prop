@@ -3,3 +3,6 @@ app.channel = DP
 ver.major = 1
 ver.minor = 0
 ver.revision = 0
+git.remote = github.com
+git.owner = derangedsenators
+git.project = copsandrobbersreleases
