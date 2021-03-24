@@ -13,56 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+    group = 'derangedsenators'
+
+mainClassName = 'me.derangedsenators.launcher.launcher.LauncherMain'
+
+def properties = new Properties()
+File propFile = new File('build.prop')
+propFile.withInputStream() {
+    properties.load(it)
+}
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    baseName =  "${properties."app.name"}"
+    version =  """${properties."ver.major"}.${properties."ver.minor"}.${properties."ver.revision"}.${properties."app.channel"}.${getGitHash()}-${getDate()}"""
+}
+
+repositories {
+    jcenter()
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+}
+
+dependencies {
+    testImplementation     'junit:junit:4.13'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+}
 buildscript {
     ext.kotlin_version = '1.4.21'
     repositories {
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
-plugins {
-    id 'java'
-    id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.9'
-}
-def properties = new Properties()
-File propFile = new File('build.prop')
-propFile.withInputStream() {
-    properties.load(it)
-}
-group 'me.derangedsenators'
-version '1.0.0'
-apply plugin: 'java'
-apply plugin: 'kotlin'
-jar{
-    manifest{
-        attributes(
-                'Main-Class': 'me.derangedsenators.launcher.MainKT'
-
-        )
-    }
-    baseName =  "${properties."app.name"}"
-    version =  """${properties."ver.major"}.${properties."ver.minor"}.${properties."ver.revision"}.${properties."app.channel"}.${getGitHash()}-${getDate()}"""
-   //from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-}
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'com.jfoenix:jfoenix:9.0.10'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-}
-javafx {
-    version = "15.0.1"
-    modules = [ 'javafx.controls','javafx.fxml' ]
-}
-
-
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -73,7 +66,6 @@ compileTestKotlin {
         jvmTarget = "1.8"
     }
 }
-
 
 static def getDateWithDash(){
     return new Date().format('dd-MM-yyyy-HH:mm')
@@ -113,6 +105,9 @@ public final class ApplicationManifest{
     String minorVersion = properties."ver.minor"
     String revisionVersion = properties."ver.revision"
     String channel = properties."app.channel"
+    String remote = properties."git.remote"
+    String owner = properties."git.owner"
+    String project = properties."git.project"
     String content = """${firstWords} String APPLICATION_NAME = "${properties."app.name"}" ;
     ${firstWords} int  MAJOR_VERSION =  ${majorVersion};
     ${firstWords} int  MINOR_VERSION =  ${minorVersion};
@@ -120,7 +115,11 @@ public final class ApplicationManifest{
     ${firstWords} String CHANNEL = "${channel}";
     ${firstWords} String BUILD_DATE = "${getDateWithDash()}";
     ${firstWords} String BUILD_COMMIT = "${getGitHash()}";
-    public static final String SEMANTIC_APPLICATION_VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION; \n"""
+    ${firstWords} String SEMANTIC_APPLICATION_VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION; \n
+    ${firstWords} String REMOTE = "${remote}";
+    ${firstWords} String OWNER = "${owner}";
+    ${firstWords} String PROJECT  = "${project}";
+    """
     String toWrite = head + content + tail
     File manifest = new File('src/main/java/me/derangedsenators/launcher/ApplicationManifest.java')
     manifest.write(toWrite)
