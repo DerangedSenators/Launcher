@@ -116,12 +116,7 @@ class GithubRelease : Downloader(), TaskCompleteListener {
     }
 
     init {
-        val url = java.lang.String.format(
-            "https://api.%s/repos/%s/%s/releases/latest",
-            ApplicationManifest.REMOTE,
-            ApplicationManifest.OWNER,
-            ApplicationManifest.PROJECT
-        )
+        val url = "https://api.${ApplicationManifest.REMOTE}/repos/${ApplicationManifest.OWNER}/${ApplicationManifest.PROJECT}/releases/latest"
         println(url)
         val api = URL(url)
         val connection: URLConnection = api.openConnection()
