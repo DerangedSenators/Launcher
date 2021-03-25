@@ -20,7 +20,7 @@ apply plugin: 'application'
 
     group = 'derangedsenators'
 
-mainClassName = 'me.derangedsenators.launcher.launcher.LauncherMain'
+mainClassName = 'me.derangedsenators.launcher.LauncherMain'
 
 def properties = new Properties()
 File propFile = new File('build.prop')
