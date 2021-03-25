@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.derangedsenators.launcher.launcher.download
+package me.derangedsenators.launcher.download
 
 import java.io.File
 
@@ -21,7 +21,7 @@ import java.io.File
  * Abstract Download class
  * @author Hanzalah Ravat
  */
-abstract class Downloader(protected val listener: DownloadCompleteListener,protected val destination: String) {
+abstract class Downloader(protected val listener: DownloadCompleteListener, protected val destination: String) {
     /**
      * Method that downloads the specified file
      */
