@@ -15,13 +15,8 @@
  */
 package me.derangedsenators.launcher.download.githubapi
 
-import java.io.IOException
-
-import java.io.ObjectOutputStream
-
-import java.io.FileOutputStream
-
-import java.io.Serializable
+import java.io.*
+import kotlin.jvm.Throws
 
 
 /**
@@ -55,5 +50,24 @@ class APIResponse : Serializable {
             i.printStackTrace()
         }
         return false
+    }
+
+    companion object {
+        /**
+         * Attempts to Deserialise the API response that has been stored in a file
+         * @param file The serialised version
+         * @throws IOException when attempting to read an incompatible file-type
+         */
+        @Throws(IOException::class)
+        fun readFromDisk(file: File): APIResponse{
+            val fileIn = FileInputStream(file)
+            val inObj = ObjectInputStream(fileIn)
+            val response = inObj.readObject()
+            if (response is APIResponse) {
+                return response
+            } else{
+                throw IOException("Object was of Incorrect Type")
+            }
+        }
     }
 }
