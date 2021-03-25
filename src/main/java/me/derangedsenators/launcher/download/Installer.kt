@@ -16,9 +16,39 @@
 package me.derangedsenators.launcher.download
 
 import java.io.IOException
+import java.lang.Exception
 
+/**
+ * Installer Abstract Class
+ * @author Hanzalah Ravat
+ */
+abstract class Installer(protected val listener: InstallerListener) {
 
-interface Installer {
     @Throws(IOException::class)
-    fun install(): Boolean
+    abstract fun onStart()
+
+    private val thread = Thread{
+        onStart()
+    }
+
+    /**
+     * Begins the download process
+     */
+    fun install(){
+        thread.start()
+    }
+    /**
+     * Interface that must be implemented to subscribe to installer notifications
+     */
+    interface InstallerListener{
+        /**
+         * Method to be invoked once installation completes successfully
+         */
+        fun onSuccess()
+
+        /**
+         * Method to be invoked should there be any exception thrown during the process
+         */
+        fun onException(exception: Exception)
+    }
 }

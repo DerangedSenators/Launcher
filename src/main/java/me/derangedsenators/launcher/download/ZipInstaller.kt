@@ -34,11 +34,12 @@ import java.util.zip.ZipFile
  * Installs Zip versions of the Game (Based on Github releases). UNTESTED
  * @author Hanzalah Ravat
  */
-class ZipInstaller(protected val zipPath: String, protected val installPath: String) : Installer {
+class ZipInstaller(private val zipPath: String, private val installPath: String, listener: InstallerListener) :
+    Installer(listener) {
 
 
     @Throws(IOException::class)
-    override fun install(): Boolean {
+    override fun onStart() {
         return try {
             val zipFile = ZipFile(zipPath)
             val enumeration: Enumeration<*> = zipFile.entries()
@@ -47,10 +48,7 @@ class ZipInstaller(protected val zipPath: String, protected val installPath: Str
                 val name = entry.name
                 val size = entry.size
                 val compressedSize = entry.compressedSize
-                val out = String.format(
-                    "name: %-20s | size: %6d | compressed size: %6d\n",
-                    name, size, compressedSize
-                )
+                val out = "name $name | size: $size | compressed size: $compressedSize \n"
                 val file = File(installPath + name)
                 if (name.endsWith("/")) {
                     file.mkdirs()
@@ -72,10 +70,10 @@ class ZipInstaller(protected val zipPath: String, protected val installPath: Str
                 fileOutputStream.close()
             }
             zipFile.close()
-            true
+            listener.onSuccess()
         } catch (exception: IOException) {
             exception.printStackTrace()
-            false
+            listener.onException(exception)
         }
     }
 
