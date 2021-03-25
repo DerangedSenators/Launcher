@@ -10,9 +10,8 @@ import java.lang.Exception
 interface DownloadCompleteListener {
     /**
      * Method to be called when a download is completed successfully.
-     * @param file This is the file that has been downloaded
      */
-    fun onDownloadSuccess(file: File)
+    fun onDownloadSuccess()
 
     /**
      * Method that is invoked when a download fails

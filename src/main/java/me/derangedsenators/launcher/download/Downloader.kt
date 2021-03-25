@@ -15,18 +15,32 @@
  */
 package me.derangedsenators.launcher.launcher.download
 
+import java.io.File
+
 /**
- * Downloader Interface
+ * Abstract Download class
  * @author Hanzalah Ravat
  */
-abstract class Downloader : Runnable {
+abstract class Downloader(protected val listener: DownloadCompleteListener,protected val destination: String) {
+    /**
+     * Method that downloads the specified file
+     */
     abstract fun download()
-    open var isComplete = false
-    override fun run() {
-        isComplete = false
+
+    abstract fun threadName(): String
+
+    /**
+     * Thread which handles the download
+     */
+    fun dlThread(
+        start: Boolean = true, // Auto Start
+        isDaemon: Boolean = false,
+        contextClassLoader: ClassLoader? = null,
+        name: String = threadName(),
+        priority: Int = -1,
+        block: () -> Unit
+    ) {
+        download()
     }
 
-    fun onRunComplete() {
-        isComplete = true
-    }
 }

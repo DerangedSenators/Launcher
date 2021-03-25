@@ -27,53 +27,34 @@ import java.util.*
 
 /**
  * Downloads a file from a  source using Background Worker threaded tasks.
+ * @author Hanzalah Ravat
  */
-class FileDownloader(private val destination: String, private val URL: String) : Runnable {
-    private val mThread: Thread = Thread(this, TAG)
-    private var isComplete = false
-    private val listenerList: MutableList<TaskCompleteListener>
-    override fun run() {
+class FileDownloader(listener: DownloadCompleteListener, destination: String, private val URL: String) :
+    Downloader(listener, destination) {
+
+    override fun download() {
         print("Download Starting...")
         try {
             val mURL = URL(URL)
             val readableByteChannel = Channels.newChannel(mURL.openStream())
             println(destination)
             val fileOutputStream = FileOutputStream(destination)
-            val fileChannel = fileOutputStream.channel
             fileOutputStream.channel
                 .transferFrom(readableByteChannel, 0, Long.MAX_VALUE)
             print("done \n")
+            listener.onDownloadSuccess()
         } catch (e: Exception) {
             e.printStackTrace()
-            print("Error: Exception Caught \n")
-        }
-        isComplete = true
-        println("Broadcasting to Listeners")
-        for (listener in listenerList) {
-            listener.taskComplete()
+            listener.onError(e)
         }
     }
 
-    /**
-     * Runs the downloader using another thread
-     */
-    fun runWithThread() {
-        mThread.start()
+    override fun threadName(): String {
+        return TAG
     }
 
-    fun addListener(listener: TaskCompleteListener) {
-        listenerList.add(listener)
-    }
-
-    interface TaskCompleteListener {
-        fun taskComplete()
-    }
 
     companion object {
         private const val TAG = "FILE_DOWNLOADER"
-    }
-
-    init {
-        listenerList = LinkedList()
     }
 }
