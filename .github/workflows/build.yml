@@ -18,6 +18,8 @@ jobs:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: ${{ runner.os }}-gradle
+    - name: Test with Gradle
+      run: gradle test
     - name: Build with Gradle
       run: gradle build
     - name: Upload Artifacts
