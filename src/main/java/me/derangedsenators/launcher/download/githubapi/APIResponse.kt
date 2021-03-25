@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.derangedsenators.launcher.launcher.download.githubapi
+package me.derangedsenators.launcher.download.githubapi
 
 import java.io.IOException
 

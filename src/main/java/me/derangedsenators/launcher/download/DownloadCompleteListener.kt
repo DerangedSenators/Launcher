@@ -1,4 +1,4 @@
-package me.derangedsenators.launcher.launcher.download
+package me.derangedsenators.launcher.download
 
 import java.io.File
 import java.lang.Exception
