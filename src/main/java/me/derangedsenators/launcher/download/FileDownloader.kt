@@ -15,6 +15,7 @@
  */
 package me.derangedsenators.launcher.download
 
+import java.io.File
 import java.io.FileOutputStream
 import java.lang.Exception
 import java.net.URL
@@ -42,6 +43,10 @@ class FileDownloader(listener: DownloadCompleteListener, destination: String, pr
             fileOutputStream.channel
                 .transferFrom(readableByteChannel, 0, Long.MAX_VALUE)
             print("done \n")
+            val file = File(destination)
+            if(file.exists()){
+                println(file.canonicalFile)
+            }
             listener.onDownloadSuccess()
         } catch (e: Exception) {
             e.printStackTrace()

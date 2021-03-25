@@ -43,14 +43,14 @@ class GithubReleaseDownloader (listener: DownloadCompleteListener, destination: 
             )
         )
         var apiOut: String
-        var JSON = ""
-        while (inputReader.readLine().also { apiOut = it } != null) JSON += apiOut
+        var JSON = inputReader.readLine()
         inputReader.close()
         val gson = Gson()
         apiResponse = gson.fromJson(JSON, APIResponse::class.java)
         val os = OSDetect.OSDetection()
         for((index,value) in apiResponse.assets?.withIndex()!!) {
-            if (value.name.contains(os)) {
+            if (value.name.toLowerCase().contains(os)) {
+                println(value.name)
                 mIndex = index
             }
         }
@@ -59,8 +59,9 @@ class GithubReleaseDownloader (listener: DownloadCompleteListener, destination: 
     override fun download() {
         if(mIndex != -1){
             val downloader = FileDownloader(listener,destination,apiResponse.assets!![mIndex].browser_download_url)
+            downloader.download()
         } else{
-            listener.onError(null) //TODO create an exception here.s
+            listener.onError(null) //TODO create an exception here.
         }
     }
 
