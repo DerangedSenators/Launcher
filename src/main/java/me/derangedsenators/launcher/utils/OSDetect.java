@@ -13,12 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.derangedsenators.launcher.launcher.download
+package me.derangedsenators.launcher.utils;
 
-import java.io.IOException
+public class OSDetect {
 
-
-interface Installer {
-    @Throws(IOException::class)
-    fun install(): Boolean
+    public static String OSDetection() {
+        String os = System.getProperty("os.name").toUpperCase();
+        if(os.contains("MAC")){
+            return "mac-os";
+        } else if(os.contains("WINDOWS")){
+            return "windows";
+        } else if(os.contains("LINUX")){
+            return "linux";
+        } else{
+            return null;
+        }
+    }
 }
