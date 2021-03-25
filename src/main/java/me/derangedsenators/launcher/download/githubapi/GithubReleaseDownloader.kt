@@ -26,8 +26,12 @@ import java.io.InputStreamReader
 import java.net.URL
 import java.net.URLConnection
 
+/**
+ * Downloader that works by getting latest release for your OS using the GitHub API
+ * @author Hanzalah Ravat
+ */
 class GithubReleaseDownloader (listener: DownloadCompleteListener, destination: String): Downloader(listener,destination){
-    private var apiResponse: APIResponse
+    var apiResponse: APIResponse
     private var mIndex = -1
     init{
         val url = "https://api.${ApplicationManifest.REMOTE}/repos/${ApplicationManifest.OWNER}/${ApplicationManifest.PROJECT}/releases/latest"
