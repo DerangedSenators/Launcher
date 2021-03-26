@@ -33,7 +33,8 @@ import java.util.*
 class FileDownloader(listener: DownloadCompleteListener, destination: String, private val URL: String) :
     Downloader(listener, destination) {
 
-    override fun download() {
+
+    override fun onStartDownload() {
         print("Download Starting...")
         try {
             val mURL = URL(URL)

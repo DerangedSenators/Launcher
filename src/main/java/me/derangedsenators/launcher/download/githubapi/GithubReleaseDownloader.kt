@@ -56,7 +56,7 @@ class GithubReleaseDownloader (listener: DownloadCompleteListener, destination: 
         }
     }
 
-    override fun download() {
+    override fun onStartDownload() {
         if(mIndex != -1){
             val downloader = FileDownloader(listener,destination,apiResponse.assets!![mIndex].browser_download_url)
             downloader.download()
@@ -64,7 +64,6 @@ class GithubReleaseDownloader (listener: DownloadCompleteListener, destination: 
             listener.onError(null) //TODO create an exception here.
         }
     }
-
 
 
     override fun threadName(): String {

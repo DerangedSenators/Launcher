@@ -25,22 +25,21 @@ abstract class Downloader(protected val listener: DownloadCompleteListener, prot
     /**
      * Method that downloads the specified file
      */
-    abstract fun download()
+    protected abstract fun onStartDownload()
 
     abstract fun threadName(): String
 
     /**
      * Thread which handles the download
      */
-    fun dlThread(
-        start: Boolean = true, // Auto Start
-        isDaemon: Boolean = false,
-        contextClassLoader: ClassLoader? = null,
-        name: String = threadName(),
-        priority: Int = -1,
-        block: () -> Unit
-    ) {
-        download()
+    private val thread = Thread{
+        onStartDownload();
     }
 
+    /**
+     * Begins the download process
+     */
+    fun download(){
+        thread.start()
+    }
 }
